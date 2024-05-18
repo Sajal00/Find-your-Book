@@ -1,0 +1,166 @@
+
+import {
+  NEXT_PUBLIC_BUILD_ENVIRONMENT,
+  NEXT_PUBLIC_DEFAULT_LOCALE,
+  NEXTAUTH_URL,
+  NEXTAUTH_SECRET,
+  MY_SECRET_TOKEN,
+  GOOGLE_ID_DEV,
+  GOOGLE_SECRET_DEV,
+  GOOGLE_ID_UAT,
+  GOOGLE_SECRET_UAT,
+  GOOGLE_ID_PROD,
+  GOOGLE_SECRET_PROD,
+  FACEBOOK_ID_DEV,
+  FACEBOOK_SECRET_DEV,
+  FACEBOOK_ID_UAT,
+  FACEBOOK_SECRET_UAT,
+  FACEBOOK_ID_PROD,
+  FACEBOOK_SECRET_PROD,
+  NEXT_PUBLIC_API_BASE_PATH_DEV,
+  NEXT_PUBLIC_API_BASE_PATH_UAT,
+  NEXT_PUBLIC_API_BASE_PATH_PROD,
+  NEXT_PUBLIC_GA_MEASUREMENT_ID_DEV,
+  NEXT_PUBLIC_GA_MEASUREMENT_ID_UAT,
+  NEXT_PUBLIC_GA_MEASUREMENT_ID_PROD,
+  NEXT_PUBLIC_GTM_ID_DEV,
+  NEXT_PUBLIC_GTM_AUTH_DEV,
+  NEXT_PUBLIC_GTM_ID_UAT,
+  NEXT_PUBLIC_GTM_AUTH_UAT,
+  NEXT_PUBLIC_GTM_ID_PROD,
+  NEXT_PUBLIC_GTM_AUTH_PROD,
+  NEXT_PUBLIC_BASE_URL_DEV,
+  NEXT_PUBLIC_BASE_URL_UAT,
+  NEXT_PUBLIC_BASE_URL_PROD,
+  NEXT_PUBLIC_IMAGE_KIT_BASE,
+  NEXT_PUBLIC_SOCKET_URL_DEV,
+  NEXT_PUBLIC_SOCKET_URL_UAT,
+  NEXT_PUBLIC_SOCKET_URL_PROD,
+  NEXT_PUBLIC_ONESIGNAL_APP_ID_DEV,
+  NEXT_PUBLIC_SAFARI_WEB_ID_DEV,
+  NEXT_PUBLIC_ONESIGNAL_APP_ID_UAT,
+  NEXT_PUBLIC_SAFARI_WEB_ID_UAT,
+  NEXT_PUBLIC_ONESIGNAL_APP_ID_PROD,
+  NEXT_PUBLIC_SAFARI_WEB_ID_PROD,
+  NEXT_PUBLIC_FACEBOOK_HANDLE,
+  NEXT_PUBLIC_TWITTER_HANDLE,
+  NEXT_PUBLIC_INSTAGRAM_HANDLE,
+  NEXT_PUBLIC_YOUTUBE_HANDLE,
+  NEXT_PUBLIC_BLOG_HANDLE,
+  NEXT_PUBLIC_SUGGESTION_BASE_PATH_DEV,
+  NEXT_PUBLIC_SUGGESTION_BASE_PATH_UAT,
+  NEXT_PUBLIC_SUGGESTION_BASE_PATH_PROD,
+  REDIS_HOST_DEV,
+  REDIS_PORT_DEV,
+  REDIS_HOST_UAT,
+  REDIS_PORT_UAT,
+  REDIS_HOST_PROD,
+  REDIS_PORT_PROD,
+  ABLY_CLIENT_ID,
+  ABLY_API_KEY_DEV,
+  ABLY_API_KEY_PROD,
+  NEXT_PUBLIC_ABLY_CHANNEL_DEV,
+  NEXT_PUBLIC_ABLY_CHANNEL_PROD,
+  NEXT_PUBLIC_CLOUDFLARE_WORKER_URL_DEV,
+  NEXT_PUBLIC_CLOUDFLARE_WORKER_URL_UAT,
+  NEXT_PUBLIC_CLOUDFLARE_WORKER_URL_PROD
+} from 'react-native-dotenv';
+
+// const isProd = NODE_ENV === "production";
+const build_environment = NEXT_PUBLIC_BUILD_ENVIRONMENT;
+
+const appConfigDev = {
+  google_id: GOOGLE_ID_DEV,
+  google_key: GOOGLE_SECRET_DEV,
+  facebook_id: FACEBOOK_ID_DEV,
+  facebook_key: FACEBOOK_SECRET_DEV,
+  api_base_path: NEXT_PUBLIC_API_BASE_PATH_DEV,
+  ga_measurement_id: NEXT_PUBLIC_GA_MEASUREMENT_ID_DEV,
+  gtm_id: NEXT_PUBLIC_GTM_ID_DEV,
+  gtm_auth: NEXT_PUBLIC_GTM_AUTH_DEV,
+  app_base_path: NEXT_PUBLIC_BASE_URL_DEV,
+  // sitemap_folder: NEXT_PUBLIC_SITEMAP_FOLDER_DEV,
+  onesignal_app_id: NEXT_PUBLIC_ONESIGNAL_APP_ID_DEV,
+  safari_web_id: NEXT_PUBLIC_SAFARI_WEB_ID_DEV,
+  redis_host: REDIS_HOST_DEV,
+  redis_port: REDIS_PORT_DEV,
+  suggestion_base_path: NEXT_PUBLIC_SUGGESTION_BASE_PATH_DEV,
+  auto_suggestion_api:
+    NEXT_PUBLIC_SUGGESTION_BASE_PATH_DEV +
+    "doctube_auto_suggest/doctube_auto_suggest",
+  ably_api_key: ABLY_API_KEY_DEV,
+  ably_channel: NEXT_PUBLIC_ABLY_CHANNEL_DEV,
+  cloudflare_worker_api: NEXT_PUBLIC_CLOUDFLARE_WORKER_URL_DEV,
+};
+
+const appConfigUat = {
+  google_id: GOOGLE_ID_UAT,
+  google_key: GOOGLE_SECRET_UAT,
+  facebook_id: FACEBOOK_ID_UAT,
+  facebook_key: FACEBOOK_SECRET_UAT,
+  api_base_path: NEXT_PUBLIC_API_BASE_PATH_UAT,
+  ga_measurement_id: NEXT_PUBLIC_GA_MEASUREMENT_ID_UAT,
+  gtm_id: NEXT_PUBLIC_GTM_ID_UAT,
+  gtm_auth: NEXT_PUBLIC_GTM_AUTH_UAT,
+  app_base_path: NEXT_PUBLIC_BASE_URL_UAT,
+  // sitemap_folder: NEXT_PUBLIC_SITEMAP_FOLDER_PROD,
+  onesignal_app_id: NEXT_PUBLIC_ONESIGNAL_APP_ID_UAT,
+  safari_web_id: NEXT_PUBLIC_SAFARI_WEB_ID_UAT,
+  redis_host: REDIS_HOST_UAT,
+  redis_port: REDIS_PORT_UAT,
+  suggestion_base_path: NEXT_PUBLIC_SUGGESTION_BASE_PATH_UAT,
+  auto_suggestion_api:
+    NEXT_PUBLIC_SUGGESTION_BASE_PATH_UAT +
+    "doctube_auto_suggest/doctube_auto_suggest",
+  ably_api_key: ABLY_API_KEY_PROD,
+  ably_channel: NEXT_PUBLIC_ABLY_CHANNEL_PROD,
+  cloudflare_worker_api: NEXT_PUBLIC_CLOUDFLARE_WORKER_URL_UAT,
+};
+
+const appConfigProd = {
+  google_id: GOOGLE_ID_PROD,
+  google_key: GOOGLE_SECRET_PROD,
+  facebook_id: FACEBOOK_ID_PROD,
+  facebook_key: FACEBOOK_SECRET_PROD,
+  api_base_path: NEXT_PUBLIC_API_BASE_PATH_PROD,
+  ga_measurement_id: NEXT_PUBLIC_GA_MEASUREMENT_ID_PROD,
+  gtm_id: NEXT_PUBLIC_GTM_ID_PROD,
+  gtm_auth: NEXT_PUBLIC_GTM_AUTH_PROD,
+  app_base_path: NEXT_PUBLIC_BASE_URL_PROD,
+  // sitemap_folder: NEXT_PUBLIC_SITEMAP_FOLDER_PROD,
+  onesignal_app_id: NEXT_PUBLIC_ONESIGNAL_APP_ID_PROD,
+  safari_web_id: NEXT_PUBLIC_SAFARI_WEB_ID_PROD,
+  redis_host: REDIS_HOST_PROD,
+  redis_port: REDIS_PORT_PROD,
+  suggestion_base_path: NEXT_PUBLIC_SUGGESTION_BASE_PATH_PROD,
+  auto_suggestion_api:
+    NEXT_PUBLIC_SUGGESTION_BASE_PATH_PROD +
+    "doctube_auto_suggest/doctube_auto_suggest",
+  ably_api_key: ABLY_API_KEY_PROD,
+  ably_channel: NEXT_PUBLIC_ABLY_CHANNEL_PROD,
+  cloudflare_worker_api: NEXT_PUBLIC_CLOUDFLARE_WORKER_URL_PROD,
+};
+const appConfigLocal = {
+  ...appConfigDev,
+  app_base_path: "http://localhost:3000",
+  redis_host: REDIS_HOST_DEV,
+  redis_port: REDIS_PORT_DEV,
+  ably_api_key: ABLY_API_KEY_DEV,
+  ably_channel: NEXT_PUBLIC_ABLY_CHANNEL_DEV,
+  cloudflare_worker_api: NEXT_PUBLIC_CLOUDFLARE_WORKER_URL_DEV,
+};
+const configForEnvironment = () => {
+  switch (build_environment) {
+    case "1":
+      return appConfigDev;
+    case "2":
+      return appConfigUat;
+    case "3":
+      return appConfigProd;
+    default:
+      return appConfigLocal;
+  }
+};
+
+const appConfig = configForEnvironment();
+export default appConfig;
