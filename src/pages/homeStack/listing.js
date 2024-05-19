@@ -14,47 +14,58 @@ import {
 const deviceHeight = Dimensions.get('window').height;
 const deviceWidth = Dimensions.get('window').width;
 import DefaultHeader from '../../components/header';
-import DefaultFooter from '../../components/footer';
 import {Color} from '../../assets/styles/globalStyle';
 import listingStyle from '../../assets/styles/pages/listing';
 import Toast from 'react-native-simple-toast';
+import BookCard from '../../components/bookCard';
 
 const api = require('../../api/index');
 
 const Listing = props => {
   api.setNavigation(props.navigation);
 
+  const [searchValue, setSearchValue] = useState('all');
+  const [bookData, setBookData] = useState([]);
   useEffect(() => {
-    // getData()
+    getData();
   }, []);
 
+  useEffect(() => {
+    getData();
+  }, [searchValue]);
+
   const getData = () => {
+    console.log('inside api call', searchValue);
     api.bookApiHelper(
-      {searchValue: 'all', offset: 0, limit: 10},
+      {searchValue: searchValue, offset: 0, limit: 10},
       'GET',
       'search_book',
-      (e, r) => {
+      async (e, r) => {
         if (e) {
-          // console.log("language text error!" + e);
+          console.log('get Book error!' + e);
         } else {
-          // console.log('language text result: ', r);
-          if (r.status_code == 200) {
-            let data = JSON.stringify(r.data);
-            console.log('data==>', data);
-          } else if (r.status_code == 203) {
-            if (count < 2) {
-              Toast.showWithGravity(
-                r.message ? r.message : '',
-                Toast.SHORT,
-                Toast.CENTER,
-              );
-            }
-          } else {
-            null;
-          }
+          console.log('Get Book result: ', r);
+
+          let bookArray = [];
+          r?.docs.map(item => {
+            let bookObj = {
+              Title: item?.title,
+              PublishYear: item?.first_publish_year,
+              CoverUri: item?.cover_i,
+              id: item?.key,
+            };
+            bookArray.push(bookObj);
+          });
+
+          console.log('my book array', bookArray);
+          setBookData(bookArray);
         }
       },
     );
+  };
+
+  handleFevaurite = id => {
+    console.log('id at HomeNavigator', id);
   };
 
   const headerComponent = () => {
@@ -65,10 +76,20 @@ const Listing = props => {
           onPress={() => {
             Keyboard.dismiss();
           }}>
-          <TouchableOpacity
-            onPress={() => props.navigation.navigate('details')}>
-            <Text style={listingStyle.text}>welcome to listing</Text>
-          </TouchableOpacity>
+          <FlatList
+            style={listingStyle.BookContentcontainer}
+            contentContainerStyle={listingStyle.BoonContentStyle}
+            numColumns={2}
+            data={bookData}
+            // keyExtractor={() => 'key'}
+            renderItem={({item}) => (
+              <BookCard
+                data={item}
+                handleMyFevaurite={id => handleFevaurite(id)}
+              />
+            )}
+            refreshing={false}
+          />
         </TouchableWithoutFeedback>
       </SafeAreaView>
       // </KeyboardAvoidingView>
@@ -78,6 +99,10 @@ const Listing = props => {
     //reset all
   };
 
+  const handleSearchItem = item => {
+    console.log('item at home', item);
+    setSearchValue(item);
+  };
   return (
     <View style={listingStyle.mainContainer}>
       <StatusBar
@@ -85,7 +110,10 @@ const Listing = props => {
         translucent={false}
         barStyle="light-content"
       />
-      <DefaultHeader />
+      <DefaultHeader
+        setMySearchValue={item => handleSearchItem(item)}
+        mySearchValue={searchValue}
+      />
       <FlatList
         style={listingStyle.container}
         data={[]}
@@ -94,7 +122,6 @@ const Listing = props => {
         ListHeaderComponent={headerComponent()}
         onRefresh={() => refreshHandler()}
         refreshing={false}></FlatList>
-      <DefaultFooter />
     </View>
   );
 };

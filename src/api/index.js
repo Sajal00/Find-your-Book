@@ -34,9 +34,9 @@ apiCalls.bookApiHelper = (param_data, methodType, apiName, cb) => {
           .then(response => response.json())
           .then(responseJson => {
             if (responseJson.status_code === 401) {
-              // console.log("api sent 401");
+              console.log('api sent 401');
             } else {
-              // console.log('here in android.js');
+              // console.log('here in res', responseJson);
               cb(null, responseJson);
             }
           })

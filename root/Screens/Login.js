@@ -15,12 +15,6 @@ import {
 } from '@react-native-google-signin/google-signin';
 
 const Login = () => {
-  const [user, setUser] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [errorText, setErrorText] = useState('');
-  const [loading, setLoading] = useState(false);
-
   useEffect(() => {
     GoogleSignin.configure({
       // Client ID of type WEB for your server (needed

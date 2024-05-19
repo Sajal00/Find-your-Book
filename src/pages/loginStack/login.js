@@ -39,6 +39,7 @@ const Login = props => {
       scopes: ['emai'],
     });
   }, []);
+
   const handleSignIn = async () => {
     setErrorText(''); // Clear previous errors
     setLoading(true); // Start loading indicator
@@ -46,6 +47,7 @@ const Login = props => {
     try {
       const user = await auth().signInWithEmailAndPassword(email, password);
       console.log(user);
+      props.navigation.navigate('homeNavigator');
     } catch (error) {
       console.log(error);
       switch (error.code) {
@@ -66,6 +68,7 @@ const Login = props => {
       setLoading(false); // Stop loading indicator
     }
   };
+
   const signIn = async () => {
     try {
       await GoogleSignin.configure();
@@ -73,6 +76,7 @@ const Login = props => {
       const userInfo = await GoogleSignin.signIn();
       setUser(userInfo);
       console.log(userInfo);
+      props.navigation.navigate('homeNavigator');
     } catch (error) {
       if (error.code === statusCodes.SIGN_IN_CANCELLED) {
         // user cancelled the login flow
@@ -87,7 +91,11 @@ const Login = props => {
   };
 
   const refreshHandler = () => {
-    // reset all
+    setUser('');
+    setEmail('');
+    setPassword('');
+    setErrorText('');
+    setLoading(false);
   };
 
   const headerComponent = () => {
@@ -105,9 +113,9 @@ const Login = props => {
               }}>
               <>
                 <View>
-                  <Text style={styles.title}>Login</Text>
+                  <Text style={loginStyles.title}>Login</Text>
                   <TextInput
-                    style={styles.input}
+                    style={loginStyles.input}
                     onChangeText={setEmail}
                     value={email}
                     placeholder="Email"
@@ -116,7 +124,7 @@ const Login = props => {
                     autoCorrect={false}
                   />
                   <TextInput
-                    style={styles.input}
+                    style={loginStyles.input}
                     onChangeText={setPassword}
                     value={password}
                     placeholder="Password"
@@ -125,17 +133,17 @@ const Login = props => {
                     autoCorrect={false}
                   />
                   {errorText ? (
-                    <Text style={styles.errorText}>{errorText}</Text>
+                    <Text style={loginStyles.errorText}>{errorText}</Text>
                   ) : null}
                   {loading ? (
                     <ActivityIndicator size="large" color="#0000ff" />
                   ) : (
                     <Button title="Login" onPress={handleSignIn} />
                   )}
-                  <View style={styles.signUpContainer}>
+                  <View style={loginStyles.signUpContainer}>
                     <Text>Don't have an account? </Text>
                     <TouchableOpacity>
-                      <Text style={styles.signUpText}>Sign Up</Text>
+                      <Text style={loginStyles.signUpText}>Sign Up</Text>
                     </TouchableOpacity>
                   </View>
                   <GoogleSigninButton
@@ -143,6 +151,15 @@ const Login = props => {
                     color={GoogleSigninButton.Color.Dark}
                     onPress={signIn}
                   />
+                  <View style={loginStyles.signUpContainer}>
+                    <Text>Contineu as Guest User </Text>
+                    <TouchableOpacity
+                      onPress={() =>
+                        props.navigation.navigate('homeNavigator')
+                      }>
+                      <Text style={loginStyles.signUpText}>Guest User</Text>
+                    </TouchableOpacity>
+                  </View>
                 </View>
               </>
             </TouchableWithoutFeedback>
@@ -157,7 +174,7 @@ const Login = props => {
   return (
     <>
       <FlatList
-        style={loginStyles.container}
+        style={loginStyles.myContainer}
         data={[]}
         keyExtractor={() => 'key'}
         renderItem={null}
@@ -169,40 +186,3 @@ const Login = props => {
 };
 
 export default Login;
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    padding: 16,
-    backgroundColor: '#f8f8f8',
-  },
-  title: {
-    fontSize: 24,
-    marginBottom: 24,
-    textAlign: 'center',
-  },
-  input: {
-    height: 40,
-    marginVertical: 12,
-    borderWidth: 1,
-    borderColor: '#ccc',
-    paddingHorizontal: 10,
-    borderRadius: 5,
-  },
-  errorText: {
-    color: 'red',
-    textAlign: 'center',
-    marginVertical: 10,
-  },
-  signUpContainer: {
-    flexDirection: 'row',
-    padding: 20,
-    justifyContent: 'center',
-  },
-  signUpText: {
-    fontWeight: 'bold',
-  },
-  googleButton: {
-    alignSelf: 'center',
-  },
-});
