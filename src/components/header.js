@@ -12,8 +12,10 @@ import headerStyles from '../assets/styles/components/header';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import {Color} from '../assets/styles/globalStyle';
 
-const Header = ({setMySearchValue, mySearchValue}) => {
+const Header = ({setMySearchValue, mySearchValue, props}) => {
   const [searchArea, setSearchArea] = useState(false);
+  // const [favouritecount, setFavouritecount] = useState(1);
+  // const [colorState, setColorState] = React.useState(false);
 
   const handleSearch = () => {
     setSearchArea(!searchArea);
@@ -27,6 +29,7 @@ const Header = ({setMySearchValue, mySearchValue}) => {
     <>
       <View style={[headerStyles.header, headerStyles.headerFlexBox]}>
         <Text style={headerStyles.text}>Find Your Book</Text>
+
         <TouchableOpacity
           onPress={() => handleSearch()}
           style={headerStyles.searchIconContainer}>

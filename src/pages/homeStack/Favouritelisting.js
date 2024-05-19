@@ -25,7 +25,7 @@ const Details = props => {
           onPress={() => {
             Keyboard.dismiss();
           }}>
-          <Text style={detailsStyle.text}>welcome to details</Text>
+          <Text style={detailsStyle.text}>welcome to favouritelisting</Text>
         </TouchableWithoutFeedback>
       </SafeAreaView>
       // </KeyboardAvoidingView>

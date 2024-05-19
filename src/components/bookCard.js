@@ -1,17 +1,44 @@
 import {View, Text, Image, TouchableOpacity} from 'react-native';
-import React from 'react';
+import React, {useEffect} from 'react';
 import bookCardStyle from '../assets/styles/components/bookCard';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import {Color} from '../assets/styles/globalStyle';
 import AppConfig from '../api/config';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const url = AppConfig.apiLoc;
 
 const bookCard = ({data, handleMyFevaurite}) => {
   const [colorState, setColorState] = React.useState(false);
-  const handleFevaurite = id => {
+
+  const handleFevaurite = data => {
     setColorState(!colorState);
-    handleMyFevaurite(id);
+    handleMyFevaurite(data);
+  };
+
+  useEffect(() => {
+    getFavouritebooks();
+  }, []);
+  // const getFavouritebooks = async () => {
+  //   const mydata = await AsyncStorage.getItem('favourite_data');
+  //   const favoriteBooks = storedData ? JSON.parse(storedData) : [];
+  //   favoriteBooks?.map(item => {
+  //     console.log('favour item', item);
+  //     console.log('mycurrentdata', data);
+  //     item == data ? setColorState(true) : setColorState(false);
+  //   });
+  // };
+  const getFavouritebooks = async () => {
+    try {
+      const storedData = await AsyncStorage.getItem('favorite_data');
+      const favoriteBooks = storedData ? JSON.parse(storedData) : [];
+
+      if (favoriteBooks.some(item => item.id === data.id)) {
+        setColorState(true);
+      }
+    } catch (error) {
+      console.error('Error fetching favorite books from storage:', error);
+    }
   };
   return (
     <View style={bookCardStyle.mainContainer}>
@@ -26,7 +53,7 @@ const bookCard = ({data, handleMyFevaurite}) => {
       <Text style={bookCardStyle.text}>Title: {data?.Title}</Text>
       <Text style={bookCardStyle.text}>Publish Year: {data?.PublishYear}</Text>
       <TouchableOpacity
-        onPress={() => handleFevaurite(data?.id)}
+        onPress={() => handleFevaurite(data)}
         style={bookCardStyle.searchIconContainer}>
         <Icon
           name="heart"

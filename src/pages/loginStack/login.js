@@ -90,6 +90,10 @@ const Login = props => {
     }
   };
 
+  const handleSignup = navigation => {
+    props.navigation.navigate('Signup');
+  };
+
   const refreshHandler = () => {
     setUser('');
     setEmail('');
@@ -142,7 +146,7 @@ const Login = props => {
                   )}
                   <View style={loginStyles.signUpContainer}>
                     <Text>Don't have an account? </Text>
-                    <TouchableOpacity>
+                    <TouchableOpacity onPress={handleSignup}>
                       <Text style={loginStyles.signUpText}>Sign Up</Text>
                     </TouchableOpacity>
                   </View>

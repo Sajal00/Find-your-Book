@@ -11,6 +11,8 @@ import {
   TouchableWithoutFeedback,
   TouchableOpacity,
 } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
 const deviceHeight = Dimensions.get('window').height;
 const deviceWidth = Dimensions.get('window').width;
 import DefaultHeader from '../../components/header';
@@ -26,6 +28,8 @@ const Listing = props => {
 
   const [searchValue, setSearchValue] = useState('all');
   const [bookData, setBookData] = useState([]);
+  const [favoriteBooks, setFavoriteBooks] = useState([]);
+
   useEffect(() => {
     getData();
   }, []);
@@ -63,9 +67,34 @@ const Listing = props => {
       },
     );
   };
+  // const handleFevaurite = async data => {
+  //   console.log('id at HomeNavigator', data);
+  //   const favouritebook = [];
+  //   if (favouritebook.length == 0) {
+  //     favouritebook.push(data);
+  //   } else {
+  //     favouritebook.map(item => {
+  //       item == data ? favouritebook.remove(data) : favouritebook.push(data);
+  //     });
+  //   }
 
-  handleFevaurite = id => {
-    console.log('id at HomeNavigator', id);
+  //   await AsyncStorage.setItem('favourite_data', favouritebook);
+  // };
+  const handleFevaurite = async data => {
+    console.log('id at HomeNavigator', data);
+    let updatedFavorites = [...favoriteBooks];
+
+    if (updatedFavorites.includes(data)) {
+      updatedFavorites = updatedFavorites.filter(item => item !== data);
+    } else {
+      updatedFavorites.push(data);
+    }
+
+    setFavoriteBooks(updatedFavorites);
+    await AsyncStorage.setItem(
+      'favorite_data',
+      JSON.stringify(updatedFavorites),
+    );
   };
 
   const headerComponent = () => {
@@ -84,8 +113,9 @@ const Listing = props => {
             // keyExtractor={() => 'key'}
             renderItem={({item}) => (
               <BookCard
+                // _favouriteBooks={favouritebook}
                 data={item}
-                handleMyFevaurite={id => handleFevaurite(id)}
+                handleMyFevaurite={data => handleFevaurite(data)}
               />
             )}
             refreshing={false}
