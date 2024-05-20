@@ -42,6 +42,11 @@ const Login = props => {
 
   const handleSignIn = async () => {
     setErrorText(''); // Clear previous errors
+    if (!email || !password) {
+      setErrorText('Please enter both email and password.');
+      return;
+    }
+
     setLoading(true); // Start loading indicator
 
     try {

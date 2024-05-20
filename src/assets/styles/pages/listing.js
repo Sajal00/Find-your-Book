@@ -18,6 +18,7 @@ const dashboardStyles = StyleSheet.create({
   container: {
     height: deviceHeight,
     width: deviceWidth,
+    flex: 1,
   },
   keyboardAvoidingViewStyle: {
     height: deviceHeight,
@@ -39,6 +40,15 @@ const dashboardStyles = StyleSheet.create({
     justifyContent: 'center',
     flexDirection: 'column',
     alignSelf: 'center',
+  },
+  noBooksText: {
+    fontSize: 18,
+    color: 'gray',
+  },
+  noBooksContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });
 

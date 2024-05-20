@@ -55,6 +55,15 @@ const headerStyles = StyleSheet.create({
     alignSelf: 'flex-end',
     alignSelf: 'center',
   },
+  heartIconContainer: {
+    alignSelf: 'flex-end',
+    alignSelf: 'center',
+    marginLeft: deviceWidth / 3.5,
+  },
+  backIconContainer: {
+    alignSelf: 'flex-start',
+    alignSelf: 'center',
+  },
 });
 
 export default headerStyles;

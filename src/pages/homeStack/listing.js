@@ -6,6 +6,7 @@ import {
   FlatList,
   Keyboard,
   StatusBar,
+  ActivityIndicator,
   KeyboardAvoidingView,
   SafeAreaView,
   TouchableWithoutFeedback,
@@ -20,6 +21,7 @@ import {Color} from '../../assets/styles/globalStyle';
 import listingStyle from '../../assets/styles/pages/listing';
 import Toast from 'react-native-simple-toast';
 import BookCard from '../../components/bookCard';
+import {useNavigation} from '@react-navigation/native';
 
 const api = require('../../api/index');
 
@@ -29,19 +31,26 @@ const Listing = props => {
   const [searchValue, setSearchValue] = useState('all');
   const [bookData, setBookData] = useState([]);
   const [favoriteBooks, setFavoriteBooks] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [offset, setOffset] = useState(0);
+  const [hasMore, setHasMore] = useState(true);
 
-  useEffect(() => {
-    getData();
-  }, []);
+  const navigation = useNavigation();
+
+  // useEffect(() => {
+  //   getData();
+  // }, []);
 
   useEffect(() => {
     getData();
   }, [searchValue]);
 
-  const getData = () => {
+  const getData = (isNewSearch = false) => {
     console.log('inside api call', searchValue);
+    setLoading(true);
+    const currentOffset = isNewSearch ? 0 : offset;
     api.bookApiHelper(
-      {searchValue: searchValue, offset: 0, limit: 10},
+      {searchValue: searchValue, offset: currentOffset, limit: 50},
       'GET',
       'search_book',
       async (e, r) => {
@@ -62,24 +71,18 @@ const Listing = props => {
           });
 
           console.log('my book array', bookArray);
+          setBookData(isNewSearch ? bookArray : [...bookData, ...bookArray]);
+          setOffset(currentOffset + 50);
+          if (bookArray.length < 50) {
+            setHasMore(false);
+          }
+
           setBookData(bookArray);
         }
+        setLoading(false);
       },
     );
   };
-  // const handleFevaurite = async data => {
-  //   console.log('id at HomeNavigator', data);
-  //   const favouritebook = [];
-  //   if (favouritebook.length == 0) {
-  //     favouritebook.push(data);
-  //   } else {
-  //     favouritebook.map(item => {
-  //       item == data ? favouritebook.remove(data) : favouritebook.push(data);
-  //     });
-  //   }
-
-  //   await AsyncStorage.setItem('favourite_data', favouritebook);
-  // };
   const handleFevaurite = async data => {
     console.log('id at HomeNavigator', data);
     let updatedFavorites = [...favoriteBooks];
@@ -97,42 +100,86 @@ const Listing = props => {
     );
   };
 
-  const headerComponent = () => {
-    return (
-      // <KeyboardAvoidingView style={listingStyle.keyboardAvoidingViewStyle} behavior="padding">
-      <SafeAreaView style={listingStyle.safeAreaViewStyle}>
-        <TouchableWithoutFeedback
-          onPress={() => {
-            Keyboard.dismiss();
-          }}>
+  // const headerComponent = () => {
+  //   return (
+  //     // <KeyboardAvoidingView style={listingStyle.keyboardAvoidingViewStyle} behavior="padding">
+  //     <SafeAreaView style={listingStyle.safeAreaViewStyle}>
+  //       <TouchableWithoutFeedback
+  //         onPress={() => {
+  //           Keyboard.dismiss();
+  //         }}>
+  //         {loading ? (
+  //           <ActivityIndicator size={'large'} />
+  //         ) : (
+  //           <FlatList
+  //             style={listingStyle.BookContentcontainer}
+  //             contentContainerStyle={listingStyle.BoonContentStyle}
+  //             numColumns={2}
+  //             data={bookData}
+  //             // keyExtractor={() => 'key'}
+  //             renderItem={({item}) => (
+  //               {loading?
+  //                 (
+  //                 <ActivityIndicator/>
+  //               ):(
+  //                 <BookCard
+  //                 // _favouriteBooks={favouritebook}
+  //                 data={item}
+  //                 handleMyFevaurite={data => handleFevaurite(data)}
+  //               />
+  //               )}
+
+  //             )}
+  //             refreshing={false}
+  //             onEndReached={() => {
+  //               if (!loading && hasMore) {
+  //                 getData();
+  //               }
+  //             }}
+  //             onEndReachedThreshold={0.2}
+  //           />
+  //         )}
+  //       </TouchableWithoutFeedback>
+  //     </SafeAreaView>
+  //     // </KeyboardAvoidingView>
+  //   );
+  // };
+  const headerComponent = () => (
+    <SafeAreaView style={listingStyle.safeAreaViewStyle}>
+      <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
+        {loading ? (
+          <ActivityIndicator size={'large'} />
+        ) : (
           <FlatList
             style={listingStyle.BookContentcontainer}
             contentContainerStyle={listingStyle.BoonContentStyle}
             numColumns={2}
             data={bookData}
-            // keyExtractor={() => 'key'}
+            keyExtractor={item => item.id}
             renderItem={({item}) => (
-              <BookCard
-                // _favouriteBooks={favouritebook}
-                data={item}
-                handleMyFevaurite={data => handleFevaurite(data)}
-              />
+              <BookCard data={item} handleMyFevaurite={handleFevaurite} />
             )}
-            refreshing={false}
+            onEndReached={() => {
+              if (!loading && hasMore) {
+                getData();
+              }
+            }}
+            onEndReachedThreshold={0.2}
           />
-        </TouchableWithoutFeedback>
-      </SafeAreaView>
-      // </KeyboardAvoidingView>
-    );
-  };
+        )}
+      </TouchableWithoutFeedback>
+    </SafeAreaView>
+  );
   const refreshHandler = () => {
-    //reset all
+    getData();
+    setHasMore(true);
   };
 
   const handleSearchItem = item => {
     console.log('item at home', item);
     setSearchValue(item);
   };
+
   return (
     <View style={listingStyle.mainContainer}>
       <StatusBar
@@ -140,10 +187,14 @@ const Listing = props => {
         translucent={false}
         barStyle="light-content"
       />
+
       <DefaultHeader
         setMySearchValue={item => handleSearchItem(item)}
         mySearchValue={searchValue}
+        navigation={navigation}
+        showSearchOIcon={true}
       />
+
       <FlatList
         style={listingStyle.container}
         data={[]}
